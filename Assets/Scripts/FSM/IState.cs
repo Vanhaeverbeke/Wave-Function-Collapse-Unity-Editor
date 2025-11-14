@@ -1,4 +1,3 @@
-using UnityEngine;
 
 namespace FinalStateMachine.States
 {
@@ -8,7 +7,7 @@ namespace FinalStateMachine.States
 
         public abstract void OnExit();
 
-        public abstract void Update(float deltaTime);
+        public abstract void Update();
 
     }
 }

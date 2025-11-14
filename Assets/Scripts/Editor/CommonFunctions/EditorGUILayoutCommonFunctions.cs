@@ -117,11 +117,13 @@ namespace Editor.CommonFunctions.Layout
             return isPressed;
         }
 
-        public static void ToolBarTabs(int space, ref int currentTab, string[] tabNames)
+        public static int ToolBarTabs(int space, int currentTab, string[] tabNames)
         {
             GUILayout.Space(space);
 
             currentTab = GUILayout.Toolbar(currentTab, tabNames);
+
+            return currentTab;
         }
     }
 }
