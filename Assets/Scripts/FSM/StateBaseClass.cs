@@ -1,4 +1,6 @@
 using FinalStateMachine.FSM;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace FinalStateMachine.States
@@ -7,16 +9,18 @@ namespace FinalStateMachine.States
     {
         public StateBaseClass(FSMBaseClass fsm)
         {
-            FSM = fsm;
+            _fsm = fsm;
         }
 
-        public FSMBaseClass FSM {  get; private set; }
+        protected FSMBaseClass _fsm {  get; private set; }
 
         public abstract void OnEnter();
 
         public abstract void OnExit();
 
-        public abstract void Update(float deltaTime);
+        public abstract void PropertyHasChanged(object sender, PropertyChangedEventArgs eventArgs);
+
+        public abstract void Update();
 
     }
 }
