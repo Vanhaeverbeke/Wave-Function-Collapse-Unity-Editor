@@ -98,7 +98,7 @@ namespace Editor.CommonFunctions.AssetDataBase
             }
         }
 
-        public static bool ScriptableObjectFolderToList<T>(string[] folderPaths, List<T> list) where T : ScriptableObject
+        public static bool ScriptableObjectFolderToList<T>(string[] folderPaths, ref List<T> list) where T : ScriptableObject
         {
             string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}", folderPaths);
 
