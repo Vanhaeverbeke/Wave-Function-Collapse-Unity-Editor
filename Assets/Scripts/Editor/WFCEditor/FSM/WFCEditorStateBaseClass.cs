@@ -1,9 +1,11 @@
+using Editor.CommonFunctions.Layout;
 using FinalStateMachine.FSM;
 using FinalStateMachine.States;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using UnityEditor;
 
-namespace WfcEditor
+namespace WFCEditor
 {
     public partial class WFCEditor
     {
@@ -15,6 +17,11 @@ namespace WfcEditor
 
             public WFCEditorStateBaseClass(FSMBaseClass fsm) : base(fsm)
             {
+            }
+
+            public override void Initialize()
+            {
+
             }
 
             public override void OnEnter()
@@ -29,8 +36,8 @@ namespace WfcEditor
 
             public override void Update()
             {
-                _context.DisplayTitle();
-                _context.DisplayTabs();
+                DisplayTitle();
+                DisplayTabs();
             }
 
             public override void PropertyHasChanged(object sender, PropertyChangedEventArgs eventArgs)
@@ -60,6 +67,22 @@ namespace WfcEditor
                     _fsm.TransisionTo(_fsm.NodesBuilderState);
                 }
             }
+
+            private void DisplayTabs()
+            {
+                const int SPACE = 10;
+
+                _context.CurrentTab = EditorGUILayoutCommonFunctions.ToolBarTabs(SPACE, _context.CurrentTab, _context._TABNAMES);
+            }
+
+            private void DisplayTitle()
+            {
+                const int SPACE = 10;
+                const string LABEL = "WFC Editor";
+
+                EditorGUILayoutCommonFunctions.DrawCentralLabel(LABEL, SPACE, EditorStyles.boldLabel);
+            }
+
         }
     }
 
