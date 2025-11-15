@@ -1,6 +1,6 @@
 using FinalStateMachine.FSM;
 
-namespace WfcEditor
+namespace WFCEditor
 {
     public partial class WFCEditor
     {
@@ -34,9 +34,22 @@ namespace WfcEditor
             {
                 Context = context;
 
-
+                PresetEditorState = new PresetEditorState(this);
+                PresetNodesState = new PresetNodesState(this);
+                NodesEditorState = new NodesEditorState(this);
+                NodesBuilderState = new NodesBuilderState(this);
 
                 TransisionTo(PresetEditorState);
+            }
+
+            public override void Initialize()
+            {
+                base.Initialize();
+
+                PresetEditorState.Initialize();
+                PresetNodesState.Initialize();
+                NodesEditorState.Initialize();
+                NodesBuilderState.Initialize();
             }
         }
     }
