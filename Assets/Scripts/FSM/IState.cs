@@ -9,6 +9,8 @@ namespace FinalStateMachine.States
 
         public abstract void Update();
 
+        public abstract void Initialize();
+
     }
 }
 

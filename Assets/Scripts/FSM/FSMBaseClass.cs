@@ -11,6 +11,10 @@ namespace FinalStateMachine.FSM
             get { return _currentState; }
             private set { _currentState = value; }
         }
+        public virtual void Initialize()
+        {
+
+        }
         public virtual void Update()
         {
             Currentstate.Update();
