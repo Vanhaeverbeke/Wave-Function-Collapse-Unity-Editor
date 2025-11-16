@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbdc8ad7aca3be64db561074781ab3dc, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  GridWidth: 20
-  GridHeight: 0
-  GenerationPosition: {x: 0, y: 0, z: 0}
-  TileDimensions: {x: 0, y: 0, z: 0}
+  GridWidth: 10
+  GridHeight: 10
+  GenerationPosition: {x: 2.94, y: 2.35, z: 3.49}
+  TileDimensions: {x: 2.85, y: 0, z: 0}
