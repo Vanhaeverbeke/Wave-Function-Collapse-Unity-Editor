@@ -9,7 +9,6 @@ namespace Editor.CommonFunctions.Layout
     {
         public static void SaveScriptableObject(ScriptableObject scriptableObject)
         {
-            Undo.RegisterCompleteObjectUndo(scriptableObject, $"Saved scriptable object: {scriptableObject.name}");
             EditorUtility.SetDirty(scriptableObject);
         }
 
@@ -31,22 +30,28 @@ namespace Editor.CommonFunctions.Layout
             DrawCentralLabel(title, space, style);
         }
 
-        public static void TextFieldLabel(string title, int space, GUIStyle style, string textField)
+        public static string TextFieldLabel(string title, int space, GUIStyle style, string textField)
         {
             DrawCentralLabel(title, space, style);
             textField = EditorGUILayout.TextField(textField);
+
+            return textField;
         }
 
-        public static void Vector3FieldLabel(string title, int space, GUIStyle style, ref Vector3 vector3Field)
+        public static Vector3 Vector3FieldLabel(string title, int space, GUIStyle style, Vector3 vector3Field)
         {
             DrawCentralLabel(title, space, style);
-            vector3Field = EditorGUILayout.Vector3Field(string.Empty,vector3Field);
+            vector3Field = EditorGUILayout.Vector3Field(string.Empty, vector3Field);
+
+            return vector3Field;
         }
 
-        public static void ObjectFieldLabel<T>(string title, int space, GUIStyle style, T objectField, bool allowSceneObjects = false) where T : UnityEngine.Object
+        public static T ObjectFieldLabel<T>(string title, int space, GUIStyle style, T objectField, bool allowSceneObjects = false) where T : UnityEngine.Object
         {
             DrawCentralLabel(title, space, style);
             objectField = (T)EditorGUILayout.ObjectField(objectField, typeof(T), allowSceneObjects);
+
+            return objectField;
         }
 
         public static void Ints2FieldLabel(int space, int labelWidth, int spaceBetween, string int1Text, string int2Text, ref int int1Field, ref int int2Field)
@@ -66,23 +71,27 @@ namespace Editor.CommonFunctions.Layout
             GUILayout.EndHorizontal();
         }
 
-        public static void Vector3FieldTransformLabel(string title, int space, GUIStyle style, ref Vector3 vector3Field, Transform transformField, ref Vector3 neededTransformField)
+        public static Transform Vector3FieldTransformLabel(string title, int space, GUIStyle style, ref Vector3 vector3Field, bool allowSceneObjects)
         {
-            ObjectFieldLabel<Transform>(title, space, style, transformField);
+            Transform transform = null;
 
-            if(transformField != null)
+            transform = ObjectFieldLabel<Transform>(title, space, style, transform, allowSceneObjects);
+
+            if (transform != null)
             {
-                vector3Field = neededTransformField;
+                return transform;
             }
 
             vector3Field = EditorGUILayout.Vector3Field(string.Empty, vector3Field);
+
+            return transform;
         }
 
-        public static void ScrollListButtonsWithCurrentField<T>(int scrollViewHeight, Color activeColor, ref Vector2 scrollPosition, List<T> list, T currentObject) where T : UnityEngine.Object
+        public static void ScrollListButtonsWithCurrentField<T>(int scrollViewHeight, Color activeColor, ref Vector2 scrollPosition, ref List<T> list, ref T currentObject) where T : UnityEngine.Object
         {
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(scrollViewHeight));
 
-            for ( int i = 0; i < list.Count; i++ )
+            for (int i = 0; i < list.Count; i++)
             {
                 if (list[i] == currentObject)
                 {
@@ -102,6 +111,52 @@ namespace Editor.CommonFunctions.Layout
             GUI.backgroundColor = Color.white;
 
             EditorGUILayout.EndScrollView();
+        }
+
+        public static T ScrollListButtons<T>(int scrollViewHeight, ref Vector2 scrollPosition, ref List<T> list) where T : UnityEngine.Object
+        {
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(scrollViewHeight));
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (GUILayout.Button(list[i].name))
+                {
+                    for (int k = i; k < list.Count; k++)
+                    {
+                        if (GUILayout.Button(list[i].name))
+                        {
+                        }
+                    }
+
+                    EditorGUILayout.EndScrollView();
+                    return list[i];
+                }
+            }
+
+            EditorGUILayout.EndScrollView();
+            return null;
+        }
+        public static string ScrollListButtons(int scrollViewHeight, ref Vector2 scrollPosition, ref List<string> list)
+        {
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(scrollViewHeight));
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (GUILayout.Button(list[i]))
+                {
+                    for (int k = i; k < list.Count; k++)
+                    {
+                        if (GUILayout.Button(list[i]))
+                        {
+                        }
+                    }
+
+                    EditorGUILayout.EndScrollView();
+                    return list[i];
+                }
+            }
+            EditorGUILayout.EndScrollView();
+            return null;
         }
 
         public static bool LabelButtonField(int space, string labelText, string buttonText, int buttonWidth)
