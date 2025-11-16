@@ -1,45 +1,52 @@
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
+using Editor.CommonFunctions.Layout;
 
 namespace Editor.CommonFunctions.AssetDataBase
 {
     public static class AssetDataBaseCommonFunctions
     {
-        public static bool CreateScriptableObject<T>(T scriptableObject, string folderPath) where T : ScriptableObject
+        public static T CreateScriptableObject<T>(string scriptableObjectName, string folderPath) where T : ScriptableObject
         {
-            if (!AssetDatabase.AssetPathExists(folderPath + '/' + scriptableObject.name + ".asset"))
+            if (!AssetDatabase.AssetPathExists(folderPath + '/' + scriptableObjectName + ".asset"))
             {
+                T scriptableObject = ScriptableObject.CreateInstance<T>();
+                scriptableObject.name = scriptableObjectName;
+
                 AssetDatabase.CreateAsset(scriptableObject, folderPath + '/' + scriptableObject.name + ".asset");
-                
-                if(AssetDatabase.AssetPathExists(folderPath + '/' + scriptableObject.name + ".asset"))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return scriptableObject;
             }
             else
             {
-                return false;
+                return null;
             }
             
         }
 
-        public static bool CreatScriptableObjectAddToList<T>(T scriptableObject, string folderPath, List<T> list) where T : ScriptableObject 
+        public static void CreatScriptableObjectAddToList<T>(string scriptableObjectName, string folderPath, List<T> list) where T : ScriptableObject 
         {
-            if(list != null)
+            T scriptableObject = CreateScriptableObject<T>(scriptableObjectName, folderPath);
+
+            if (list != null)
             {
-                list.Add(scriptableObject);
+                if(scriptableObject != null)
+                {
+                    list.Add(scriptableObject);
+                }
             }
-            else
+        }
+
+        public static T CreateScriptableObjectOnceOrFind<T>(string scriptableObjectName, string folderPath) where T : ScriptableObject
+        {
+            T scriptableObject = (T)AssetDatabase.LoadAssetAtPath( folderPath + "/" + scriptableObjectName + ".asset", typeof(T));
+
+            if(scriptableObject == null)
             {
-                return false;
+                scriptableObject = CreateScriptableObject<T>(scriptableObjectName, folderPath);
             }
 
-            return CreateScriptableObject<T>(scriptableObject, folderPath);
+            return scriptableObject;
         }
 
         public static bool RemoveScriptableObject<T>(T scriptableObject, string folderPath) where T : ScriptableObject
@@ -66,6 +73,7 @@ namespace Editor.CommonFunctions.AssetDataBase
             if (AssetDatabase.RenameAsset(folderPath + '/' + scriptableObject.name + ".asset", newName) == string.Empty)
             {
                 scriptableObject.name = newName;
+                EditorGUILayoutCommonFunctions.SaveScriptableObject(scriptableObject);
                 return true;
             }
             else
